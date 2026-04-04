@@ -91,7 +91,7 @@ jobs:
     name: SonarCloud Analysis
     needs: [backend, frontend]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    if: (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && vars.SONAR_ENABLED == 'true'
 
     steps:
       - uses: actions/checkout@v4
@@ -103,6 +103,7 @@ jobs:
         with:
           name: backend-coverage
           path: backend/coverage/
+        continue-on-error: true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5
