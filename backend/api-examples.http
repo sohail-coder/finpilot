@@ -1,0 +1,227 @@
+### FinPilot API Examples
+### Use with VS Code REST Client extension or any HTTP client
+### Replace {{token}} with your JWT after login
+
+@baseUrl = http://localhost:3000/api
+@token = YOUR_JWT_TOKEN_HERE
+
+# ─────────────────────────────────────────────────
+# AUTH
+# ─────────────────────────────────────────────────
+
+### Register a new user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "password123",
+  "name": "Alice",
+  "baseCurrency": "USD"
+}
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "password123"
+}
+
+### Get profile
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+# ─────────────────────────────────────────────────
+# CATEGORIES
+# ─────────────────────────────────────────────────
+
+### List all categories
+GET {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+
+### Create expense category
+POST {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Food & Dining",
+  "categoryType": "EXPENSE",
+  "color": "#EF4444"
+}
+
+### Create income category
+POST {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Salary",
+  "categoryType": "INCOME",
+  "color": "#10B981"
+}
+
+### Create sub-category (replace PARENT_ID with actual id)
+POST {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Groceries",
+  "categoryType": "EXPENSE",
+  "parentId": "PARENT_ID",
+  "color": "#F59E0B"
+}
+
+### Get single category (replace CATEGORY_ID)
+GET {{baseUrl}}/categories/CATEGORY_ID
+Authorization: Bearer {{token}}
+
+### Update category (replace CATEGORY_ID)
+PATCH {{baseUrl}}/categories/CATEGORY_ID
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Food & Drinks",
+  "color": "#F97316"
+}
+
+### Delete category (replace CATEGORY_ID — must have no transactions)
+DELETE {{baseUrl}}/categories/CATEGORY_ID
+Authorization: Bearer {{token}}
+
+# ─────────────────────────────────────────────────
+# TRANSACTIONS
+# ─────────────────────────────────────────────────
+
+### Create transaction in USD (replace CATEGORY_ID)
+POST {{baseUrl}}/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "categoryId": "CATEGORY_ID",
+  "amount": 42.50,
+  "currency": "USD",
+  "description": "Lunch at cafe",
+  "transactionDate": "2026-03-15",
+  "tags": ["lunch", "work"]
+}
+
+### Create transaction in EUR — currency auto-converted to base
+POST {{baseUrl}}/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "categoryId": "CATEGORY_ID",
+  "amount": 100.00,
+  "currency": "EUR",
+  "description": "Online shopping",
+  "transactionDate": "2026-03-20",
+  "tags": ["shopping"]
+}
+
+### Create income transaction
+POST {{baseUrl}}/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "categoryId": "INCOME_CATEGORY_ID",
+  "amount": 5000.00,
+  "currency": "USD",
+  "description": "March salary",
+  "transactionDate": "2026-03-01",
+  "isRecurring": true
+}
+
+### List transactions (paginated, filtered)
+GET {{baseUrl}}/transactions?page=1&limit=20
+Authorization: Bearer {{token}}
+
+### List only expenses
+GET {{baseUrl}}/transactions?type=EXPENSE&page=1&limit=10
+Authorization: Bearer {{token}}
+
+### List by date range
+GET {{baseUrl}}/transactions?startDate=2026-03-01&endDate=2026-03-31&page=1&limit=20
+Authorization: Bearer {{token}}
+
+### List by category
+GET {{baseUrl}}/transactions?categoryId=CATEGORY_ID&page=1&limit=20
+Authorization: Bearer {{token}}
+
+### Get single transaction (replace TXN_ID)
+GET {{baseUrl}}/transactions/TXN_ID
+Authorization: Bearer {{token}}
+
+### Update transaction amount — triggers re-conversion
+PATCH {{baseUrl}}/transactions/TXN_ID
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "amount": 55.00
+}
+
+### Update transaction currency — triggers re-conversion
+PATCH {{baseUrl}}/transactions/TXN_ID
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "currency": "GBP",
+  "amount": 45.00
+}
+
+### Move transaction to different category — updates transactionType
+PATCH {{baseUrl}}/transactions/TXN_ID
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "categoryId": "NEW_CATEGORY_ID"
+}
+
+### Delete transaction
+DELETE {{baseUrl}}/transactions/TXN_ID
+Authorization: Bearer {{token}}
+
+# ─────────────────────────────────────────────────
+# VALIDATION EXAMPLES (expect 400 errors)
+# ─────────────────────────────────────────────────
+
+### Missing required fields
+POST {{baseUrl}}/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "amount": 10.00
+}
+
+### Invalid category type
+POST {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Bad",
+  "categoryType": "DEBIT"
+}
+
+### Negative amount
+POST {{baseUrl}}/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "categoryId": "CATEGORY_ID",
+  "amount": -50,
+  "currency": "USD",
+  "transactionDate": "2026-03-15"
+}

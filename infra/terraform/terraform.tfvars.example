@@ -1,0 +1,35 @@
+# ──────────────────────────────────────────────────────
+# Production environment — terraform.tfvars
+# Copy this file and fill in your values.
+# NEVER commit this file to git.
+# ──────────────────────────────────────────────────────
+
+aws_region  = "us-east-1"
+environment = "prod"
+app_name    = "finpilot"
+
+# Domain (leave empty to use CloudFront default domain)
+domain_name = ""
+
+# Database
+db_instance_class = "db.t4g.micro"
+db_name           = "finpilot"
+db_username       = "finpilot_admin"
+db_password       = "CHANGE_ME_STRONG_PASSWORD_HERE"
+
+# ECS Backend
+backend_cpu           = 256    # 0.25 vCPU
+backend_memory        = 512    # 512 MiB
+backend_desired_count = 2
+
+# Application secrets
+jwt_secret       = "CHANGE_ME_MIN_32_CHARS_RANDOM_STRING"
+openai_api_key   = ""
+google_client_id = ""
+
+# SMTP (optional)
+smtp_host = ""
+smtp_port = 587
+smtp_user = ""
+smtp_pass = ""
+smtp_from = ""

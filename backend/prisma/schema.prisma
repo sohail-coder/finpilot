@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String?
+  name         String?
+  googleId     String?   @unique
+  baseCurrency String    @default("USD")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  transactions      Transaction[]
+  categories        Category[]
+  budgets           Budget[]
+  bankSyncLogs      BankSyncLog[]
+  auditLogs         AuditLog[]
+  aiRecommendations AIRecommendation[]
+  reportSchedule    ReportSchedule?
+}
+
+model Category {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  parentId     String?
+  parent       Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children     Category[] @relation("CategoryHierarchy")
+  categoryType String // 'INCOME' | 'EXPENSE'
+  color        String     @default("#3B82F6")
+  icon         String?
+  isDefault    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@unique([userId, name, parentId])
+  // @@index([userId]) — removed: redundant, covered by the unique index prefix
+  @@index([userId, categoryType])
+}
+
+model Transaction {
+  id                 String       @id @default(cuid())
+  userId             String
+  user               User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId         String
+  category           Category     @relation(fields: [categoryId], references: [id])
+  bankSyncLogId      String?
+  bankSyncLog        BankSyncLog? @relation(fields: [bankSyncLogId], references: [id], onDelete: SetNull)
+  description        String?
+  amount             Decimal      @db.Decimal(15, 2)
+  baseCurrencyAmount Decimal      @db.Decimal(15, 2)
+  currency           String
+  exchangeRate       Decimal?     @db.Decimal(10, 6)
+  transactionDate    DateTime     @db.Date
+  transactionType    String // 'INCOME' | 'EXPENSE'
+  tags               String[]     @default([])
+  notes              String?
+  isRecurring        Boolean      @default(false)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([userId, transactionDate])
+  @@index([userId, categoryId])
+  @@index([userId, transactionType])
+  @@index([userId, transactionType, transactionDate]) // dashboard: income/expense totals by date range
+  @@index([userId, categoryId, transactionDate])      // budget-vs-actual: sum by category+month
+  @@index([bankSyncLogId])
+}
+
+model Budget {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId     String
+  category       Category @relation(fields: [categoryId], references: [id])
+  amount         Decimal  @db.Decimal(15, 2)
+  month          DateTime @db.Date
+  alertThreshold Decimal  @default(0.9) @db.Decimal(3, 2)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([userId, categoryId, month])
+  @@index([userId, month])
+}
+
+model ExchangeRate {
+  id             String   @id @default(cuid())
+  baseCurrency   String
+  targetCurrency String
+  rate           Decimal  @db.Decimal(10, 6)
+  source         String   @default("FIXED")
+  updatedAt      DateTime @updatedAt
+
+  @@unique([baseCurrency, targetCurrency])
+  // @@index([baseCurrency]) — removed: redundant, covered by the unique index prefix
+}
+
+model BankSyncLog {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileName         String?
+  source           String   @default("CSV") // 'CSV' | 'MOCK' | 'API'
+  syncedAt         DateTime @default(now())
+  transactionCount Int      @default(0)
+  status           String // 'PENDING' | 'SUCCESS' | 'FAILURE' | 'PARTIAL'
+  errorMessage     String?
+  metadata         Json?
+  createdAt        DateTime @default(now())
+
+  transactions Transaction[]
+
+  // @@index([userId]) — removed: redundant, covered by (userId, status)
+  @@index([userId, status])
+  @@index([userId, createdAt])
+}
+
+// ── AI Recommendations History ──────────────────────────────
+model AIRecommendation {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  month           DateTime @db.Date // the month these recommendations cover
+  inputSummary    Json // pre-aggregated monthly category totals sent to AI
+  recommendations Json // array of { category, currentSpending, suggestedTarget, potentialSavings, rationale }
+  totalSavings    Decimal? @db.Decimal(15, 2) // sum of all potentialSavings
+  status          String   @default("GENERATED") // 'GENERATED' | 'ACCEPTED' | 'DISMISSED'
+  createdAt       DateTime @default(now())
+
+  @@index([userId, month])
+  @@index([userId, status])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  entityType String
+  entityId   String?
+  action     String
+  oldValues  Json?
+  newValues  Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, entityType])
+  @@index([entityType, entityId])  // lookup all actions on a specific record
+  @@index([createdAt])              // time-range audit queries
+}
+
+// ── Report Schedule ─────────────────────────────────────────
+model ReportSchedule {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email     String
+  active    Boolean  @default(true)
+  lastSent  DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

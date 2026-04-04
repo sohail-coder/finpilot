@@ -1,0 +1,94 @@
+date,amount,type,category,description,currency
+2026-02-01,5200.00,INCOME,Salary,February salary,USD
+2026-02-03,1200.00,INCOME,Freelance,Logo design project,USD
+2026-02-02,85.40,EXPENSE,Food & Dining,Weekly groceries - Whole Foods,USD
+2026-02-03,12.50,EXPENSE,Food & Dining,Coffee and pastry,USD
+2026-02-04,1450.00,EXPENSE,Housing,February rent,USD
+2026-02-05,95.00,EXPENSE,Utilities,Electric bill,USD
+2026-02-05,45.00,EXPENSE,Utilities,Internet bill,USD
+2026-02-06,42.00,EXPENSE,Transportation,Gas fill-up,USD
+2026-02-07,65.00,EXPENSE,Food & Dining,Dinner at Italian restaurant,USD
+2026-02-08,120.00,EXPENSE,Shopping,Winter jacket on sale,USD
+2026-02-09,15.99,EXPENSE,Entertainment,Netflix subscription,USD
+2026-02-10,35.00,EXPENSE,Healthcare,Pharmacy - vitamins,USD
+2026-02-11,78.50,EXPENSE,Food & Dining,Groceries - Trader Joes,USD
+2026-02-12,200.00,EXPENSE,Education,Online course - React Advanced,USD
+2026-02-13,28.00,EXPENSE,Transportation,Uber rides,USD
+2026-02-14,95.00,EXPENSE,Food & Dining,Valentines dinner,USD
+2026-02-15,5200.00,INCOME,Salary,February salary 2nd half,USD
+2026-02-16,55.00,EXPENSE,Entertainment,Movie tickets and snacks,USD
+2026-02-17,340.00,EXPENSE,Shopping,New running shoes,USD
+2026-02-18,62.00,EXPENSE,Food & Dining,Groceries midweek,USD
+2026-02-20,150.00,EXPENSE,Healthcare,Dentist co-pay,USD
+2026-02-21,38.50,EXPENSE,Transportation,Gas fill-up,USD
+2026-02-22,22.00,EXPENSE,Food & Dining,Lunch with coworkers,USD
+2026-02-24,75.00,EXPENSE,Utilities,Water and garbage,USD
+2026-02-25,450.00,INCOME,Investments,Dividend payout,USD
+2026-02-26,89.00,EXPENSE,Shopping,Bluetooth headphones,USD
+2026-02-27,18.00,EXPENSE,Food & Dining,Coffee beans,USD
+2026-02-28,30.00,EXPENSE,Entertainment,Spotify and gaming subscription,USD
+2026-03-01,5200.00,INCOME,Salary,March salary,USD
+2026-03-02,800.00,INCOME,Freelance,Website maintenance retainer,USD
+2026-03-02,92.30,EXPENSE,Food & Dining,Weekly groceries - Costco,USD
+2026-03-03,14.00,EXPENSE,Food & Dining,Coffee shop,USD
+2026-03-04,1450.00,EXPENSE,Housing,March rent,USD
+2026-03-04,110.00,EXPENSE,Utilities,Electric bill - higher usage,USD
+2026-03-05,45.00,EXPENSE,Utilities,Internet bill,USD
+2026-03-06,48.00,EXPENSE,Transportation,Gas fill-up,USD
+2026-03-07,72.00,EXPENSE,Food & Dining,Sushi restaurant,USD
+2026-03-08,250.00,EXPENSE,Shopping,Spring wardrobe refresh,USD
+2026-03-09,15.99,EXPENSE,Entertainment,Netflix subscription,USD
+2026-03-10,45.00,EXPENSE,Healthcare,Prescription refill,USD
+2026-03-11,68.00,EXPENSE,Food & Dining,Groceries midweek,USD
+2026-03-12,35.00,EXPENSE,Transportation,Parking and tolls,USD
+2026-03-13,1500.00,INCOME,Freelance,Mobile app UI project,USD
+2026-03-14,42.00,EXPENSE,Food & Dining,Brunch with friends,USD
+2026-03-15,5200.00,INCOME,Salary,March salary 2nd half,USD
+2026-03-16,85.00,EXPENSE,Entertainment,Concert tickets,USD
+2026-03-17,180.00,EXPENSE,Shopping,Kitchen gadgets,USD
+2026-03-18,55.00,EXPENSE,Food & Dining,Groceries - organic produce,USD
+2026-03-19,60.00,EXPENSE,Transportation,Uber and Lyft rides,USD
+2026-03-20,200.00,EXPENSE,Education,Design workshop,USD
+2026-03-21,120.00,EXPENSE,Healthcare,Eye exam and contacts,USD
+2026-03-22,32.00,EXPENSE,Food & Dining,Pizza delivery,USD
+2026-03-23,65.00,EXPENSE,Utilities,Phone bill,USD
+2026-03-24,500.00,INCOME,Investments,Stock dividend,USD
+2026-03-25,95.00,EXPENSE,Shopping,Books and stationery,USD
+2026-03-26,28.00,EXPENSE,Food & Dining,Lunch takeout,USD
+2026-03-27,40.00,EXPENSE,Entertainment,Game purchase,USD
+2026-03-28,44.00,EXPENSE,Transportation,Gas fill-up,USD
+2026-03-29,75.00,EXPENSE,Food & Dining,Dinner out - Thai food,USD
+2026-03-30,38.00,EXPENSE,Food & Dining,Coffee and snacks,USD
+2026-04-01,5200.00,INCOME,Salary,April salary,USD
+2026-04-01,1450.00,EXPENSE,Housing,April rent,USD
+2026-04-02,88.50,EXPENSE,Food & Dining,Weekly groceries - Safeway,USD
+2026-04-02,105.00,EXPENSE,Utilities,Electric bill,USD
+2026-04-03,45.00,EXPENSE,Utilities,Internet bill,USD
+2026-04-03,16.00,EXPENSE,Food & Dining,Morning coffee and muffin,USD
+2026-04-04,2000.00,INCOME,Freelance,Brand identity project,USD
+2026-04-05,52.00,EXPENSE,Transportation,Gas fill-up,USD
+2026-04-05,220.00,EXPENSE,Shopping,New backpack and accessories,USD
+2026-04-06,58.00,EXPENSE,Food & Dining,Dinner - Mexican restaurant,USD
+2026-04-07,15.99,EXPENSE,Entertainment,Netflix subscription,USD
+2026-04-08,35.00,EXPENSE,Healthcare,Pharmacy run,USD
+2026-04-09,72.00,EXPENSE,Food & Dining,Groceries midweek,USD
+2026-04-10,300.00,EXPENSE,Education,Python bootcamp,USD
+2026-04-11,45.00,EXPENSE,Transportation,Uber to airport,USD
+2026-04-12,65.00,EXPENSE,Food & Dining,Brunch spot,USD
+2026-04-13,150.00,EXPENSE,Shopping,Spring clothes,USD
+2026-04-14,30.00,EXPENSE,Entertainment,Streaming subscriptions,USD
+2026-04-15,5200.00,INCOME,Salary,April salary 2nd half,USD
+2026-04-15,600.00,INCOME,Investments,Quarterly dividend,USD
+2026-04-16,42.00,EXPENSE,Food & Dining,Lunch with team,USD
+2026-04-17,80.00,EXPENSE,Utilities,Water and garbage,USD
+2026-04-18,38.00,EXPENSE,Transportation,Gas fill-up,USD
+2026-04-19,95.00,EXPENSE,Food & Dining,Date night dinner,USD
+2026-04-20,110.00,EXPENSE,Healthcare,Annual checkup co-pay,USD
+2026-04-21,55.00,EXPENSE,Entertainment,Escape room with friends,USD
+2026-04-22,48.00,EXPENSE,Food & Dining,Groceries quick run,USD
+2026-04-23,185.00,EXPENSE,Shopping,Wireless earbuds,USD
+2026-04-24,25.00,EXPENSE,Food & Dining,Coffee beans and tea,USD
+2026-04-25,65.00,EXPENSE,Transportation,Car wash and parking,USD
+2026-04-26,40.00,EXPENSE,Food & Dining,Takeout Chinese food,USD
+2026-04-27,75.00,EXPENSE,Entertainment,Comedy show tickets,USD
+2026-04-28,62.00,EXPENSE,Food & Dining,Grocery restock,USD
