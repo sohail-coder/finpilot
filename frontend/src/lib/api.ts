@@ -40,31 +40,13 @@ const api = axios.create({
     : "/api",
   withCredentials: true,
 });
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 
-// ✅ ADD ERROR INTERCEPTOR for 401 (optional)
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem("accessToken");
-      window.location.href = "/login";
-    }
-    return Promise.reject(error);
-  },
-);
 // ── Auth ──────────────────────────────────────────────────
 export async function login(email: string, password: string) {
-  const { data } = await api.post<ApiResponse<User>>("/auth/login", {
-    email,
-    password,
-  });
+  const { data } = await api.post<ApiResponse<User>>(
+    "/auth/login",
+    { email, password },
+  );
   return data.data!;
 }
 
@@ -74,12 +56,10 @@ export async function register(
   name: string,
   baseCurrency = "USD",
 ) {
-  const { data } = await api.post<ApiResponse<User>>("/auth/register", {
-    email,
-    password,
-    name,
-    baseCurrency,
-  });
+  const { data } = await api.post<ApiResponse<User>>(
+    "/auth/register",
+    { email, password, name, baseCurrency },
+  );
   return data.data!;
 }
 
@@ -93,16 +73,15 @@ export async function logout() {
 }
 
 export async function googleLogin(credential: string) {
-  const { data } = await api.post<ApiResponse<User>>("/auth/google", {
-    credential,
-  });
+  const { data } = await api.post<ApiResponse<User>>(
+    "/auth/google",
+    { credential },
+  );
   return data.data!;
 }
 
 export async function fetchGoogleClientId() {
-  const { data } = await api.get<ApiResponse<{ clientId: string | null }>>(
-    "/auth/google-client-id",
-  );
+  const { data } = await api.get<ApiResponse<{ clientId: string | null }>>("/auth/google-client-id");
   return data.data!.clientId;
 }
 
@@ -209,7 +188,7 @@ export async function deleteBudget(id: string) {
 // ── Dashboard ─────────────────────────────────────────────
 export async function fetchDashboard(startDate: string, endDate: string) {
   const { data } = await api.get<ApiResponse<DashboardSummary>>(
-    `/dashboard?startDate=${startDate}&endDate=${endDate}`,
+    `/dashboard?startDate=${startDate}&endDate=${endDate}`
   );
   return data.data!;
 }
@@ -227,9 +206,10 @@ export async function uploadCsvImport(file: File) {
 
 // ── Bank Sync ─────────────────────────────────────────────
 export async function triggerBankSync(provider = "mock") {
-  const { data } = await api.post<ApiResponse<BankSyncResult>>("/sync/bank", {
-    provider,
-  });
+  const { data } = await api.post<ApiResponse<BankSyncResult>>(
+    "/sync/bank",
+    { provider },
+  );
   return data.data!;
 }
 
@@ -239,17 +219,13 @@ export async function fetchSyncHistory() {
 }
 
 export async function purgeSyncedTransactions() {
-  const { data } =
-    await api.delete<ApiResponse<{ deleted: number }>>("/sync/purge");
+  const { data } = await api.delete<ApiResponse<{ deleted: number }>>("/sync/purge");
   return data.data!;
 }
 
 // ── Credit Card Recommendations ───────────────────────────
 export async function fetchCreditCardRecommendations() {
-  const { data } =
-    await api.get<ApiResponse<import("../types").CreditCardInsight>>(
-      "/ai/credit-cards",
-    );
+  const { data } = await api.get<ApiResponse<import("../types").CreditCardInsight>>("/ai/credit-cards");
   return data.data!;
 }
 
@@ -268,10 +244,7 @@ export async function downloadReportPdf(startDate: string, endDate: string) {
   URL.revokeObjectURL(url);
 }
 
-export async function downloadTransactionsCsv(
-  startDate?: string,
-  endDate?: string,
-) {
+export async function downloadTransactionsCsv(startDate?: string, endDate?: string) {
   const response = await api.get("/reports/csv", {
     params: { ...(startDate && { startDate }), ...(endDate && { endDate }) },
     responseType: "blob",
@@ -292,27 +265,20 @@ export async function generateSavingsPlan(
   startDate?: string,
   endDate?: string,
 ) {
-  const { data } = await api.post<ApiResponse<SavingsPlan>>(
-    "/ai/savings-plan",
-    {
-      savingsGoal,
-      ...(startDate && { startDate }),
-      ...(endDate && { endDate }),
-    },
-  );
+  const { data } = await api.post<ApiResponse<SavingsPlan>>("/ai/savings-plan", {
+    savingsGoal,
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
+  });
   return data.data!;
 }
 
 export async function fetchSavingsHistory() {
-  const { data } =
-    await api.get<ApiResponse<SavingsPlanHistory[]>>("/ai/history");
+  const { data } = await api.get<ApiResponse<SavingsPlanHistory[]>>("/ai/history");
   return data.data!;
 }
 
-export async function updateSavingsPlanStatus(
-  id: string,
-  status: "ACCEPTED" | "DISMISSED",
-) {
+export async function updateSavingsPlanStatus(id: string, status: "ACCEPTED" | "DISMISSED") {
   await api.patch(`/ai/${id}/status`, { status });
 }
 
@@ -322,16 +288,12 @@ export async function deleteSavingsPlan(id: string) {
 
 // ── Report Schedule ───────────────────────────────────────
 export async function fetchReportSchedule() {
-  const { data } =
-    await api.get<ApiResponse<ReportSchedule | null>>("/reports/schedule");
+  const { data } = await api.get<ApiResponse<ReportSchedule | null>>("/reports/schedule");
   return data.data ?? null;
 }
 
 export async function upsertReportSchedule(email: string) {
-  const { data } = await api.post<ApiResponse<ReportSchedule>>(
-    "/reports/schedule",
-    { email },
-  );
+  const { data } = await api.post<ApiResponse<ReportSchedule>>("/reports/schedule", { email });
   return data.data!;
 }
 

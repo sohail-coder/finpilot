@@ -1,7 +1,7 @@
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useAuth } from "../hooks/useAuth";
-import { extractErrorMessage } from "../lib/api";
-import GoogleSignInButton from "../components/GoogleSignInButton";
+import { extractErrorMessage, fetchGoogleClientId } from "../lib/api";
 
 export default function AuthPage() {
   const { login, register, googleLogin } = useAuth();
@@ -12,6 +12,13 @@ export default function AuthPage() {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [googleClientId, setGoogleClientId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchGoogleClientId()
+      .then((id) => setGoogleClientId(id))
+      .catch(() => setGoogleClientId(null));
+  }, []);
 
   async function handleGoogleSuccess(credential: string) {
     try {
@@ -71,10 +78,25 @@ export default function AuthPage() {
         )}
 
         {/* Google Button */}
-        <GoogleSignInButton
-          onSuccess={handleGoogleSuccess}
-          onError={(msg) => setError(msg)}
-        />
+        {googleClientId && (
+          <GoogleOAuthProvider clientId={googleClientId}>
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  if (credentialResponse.credential) {
+                    handleGoogleSuccess(credentialResponse.credential);
+                  }
+                }}
+                onError={() => setError("Google sign-in failed.")}
+                width="380"
+                text="continue_with"
+                shape="rectangular"
+                size="large"
+                ux_mode="popup"
+              />
+            </div>
+          </GoogleOAuthProvider>
+        )}
 
         {/* Divider */}
         <div className="flex items-center gap-4 my-6">
