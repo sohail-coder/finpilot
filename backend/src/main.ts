@@ -5,13 +5,21 @@ import { logger } from "./utils/logger";
 import { startScheduler } from "./config/scheduler";
 
 async function main() {
-  await connectDatabase();
-
+  // Hostinger waits for listen() before marking the app healthy — connect DB after binding.
   const server = app.listen(env.PORT, () => {
     logger.info(`Server running on port ${env.PORT} [${env.NODE_ENV}]`);
+    console.log(`[finpilot] listening on port ${env.PORT}`);
   });
 
-  startScheduler();
+  try {
+    await connectDatabase();
+    startScheduler();
+  } catch (error) {
+    logger.error("Database connection failed — fix DATABASE_URL in hPanel env vars", {
+      error,
+    });
+    console.error("[finpilot] Database connection failed:", error);
+  }
 
   // Graceful shutdown
   const shutdown = async (signal: string) => {

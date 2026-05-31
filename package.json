@@ -1,0 +1,13 @@
+{
+  "name": "finpilot",
+  "private": true,
+  "description": "FinPilot monorepo — Hostinger runs scripts from repo root",
+  "engines": {
+    "node": ">=20 <25"
+  },
+  "scripts": {
+    "postinstall": "npm install --prefix backend",
+    "build": "npm run build --prefix backend",
+    "start": "npm run start --prefix backend"
+  }
+}
